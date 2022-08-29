@@ -1,0 +1,410 @@
+<div class="container" style="margin-top: 80px;margin-left: 5%;">
+    <div class="row">
+        <div class="col-md-5">
+            <div class="card">
+                <div class="card-header">
+                    Administrador
+                </div>
+                <div class="card-body">
+
+                    <!-- Button trigger modal Create new employee -->
+                    <button type="button" class="btn btn-primary btn-block" data-toggle="modal"
+                        data-target="#createEmployees">
+                        Nuevo Empleado
+                    </button>
+
+                    <!-- Modal create new employee -->
+                    <div class="modal fade" id="createEmployees" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Create Employee</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form [formGroup]="form">
+                                        <div class="form-group">
+                                            <input type="text" name="identification" formControlName="txtIdentification"
+                                                placeholder="Insert identification card" class="form-control">
+                                            <div class="form-text text-danger" *ngIf=" Identification.errors?.['required'] &&
+                                            (Identification.touched || Identification.dirty)
+                                            ">
+                                                Cedula requerida
+                                            </div>
+                                            <div class="form-text text-danger" *ngIf=" Identification.errors?.['pattern'] &&
+                                            (Identification.touched || Identification.dirty)
+                                            ">
+                                                Ingresarar correctamente la cédula
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="text" name="name" formControlName="txtName"
+                                                placeholder="Insert name" class="form-control">
+                                            <div class="form-text text-danger" *ngIf=" Name.errors?.['required'] &&
+                                            (Name.touched || Name.dirty)
+                                            ">
+                                                Nombre requerido
+                                            </div>
+                                            <div class="form-text text-danger" *ngIf=" Name.errors?.['pattern'] &&
+                                                (Name.touched || Name.dirty)
+                                                ">
+                                                Ingresarar correctamente el nombre
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="text" name="last name" formControlName="txtLastname"
+                                                placeholder="Insert last name" class="form-control">
+                                            <div class="form-text text-danger" *ngIf=" LastName.errors?.['required'] &&
+                                            (LastName.touched || LastName.dirty)
+                                            ">
+                                                Apellido requerido
+                                            </div>
+                                            <div class="form-text text-danger" *ngIf=" LastName.errors?.['pattern'] &&
+                                                (LastName.touched || LastName.dirty)
+                                                ">
+                                                Ingresarar correctamente el Apellido
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="text" name="mail" formControlName="txtMail"
+                                                placeholder="Insert mail" class="form-control">
+                                            <div class="form-text text-danger" *ngIf=" Email.errors?.['required'] &&
+                                            (Email.touched || Email.dirty)
+                                            ">
+                                                Correo requerido
+                                            </div>
+                                            <div class="form-text text-danger" *ngIf=" Email.errors?.['email'] &&
+                                                (Email.touched || Email.dirty)
+                                                ">
+                                                Ingresarar correctamente el Correo
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="button" 
+                                    class="btn btn-primary" (click)="saveNewEmployee()"
+                                        data-dismiss="modal">Create</button>
+                                </div>
+                                <!-- [disabled]="form.invalid" -->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END Modal create new employee -->
+                </div>
+                <hr>
+                <div class="card-header">
+                    Filtro
+                </div>
+                <!-- vaccine filter -->
+                <div class="card-body">
+                    <!-- <input type="text"
+                    class="form-control mb-3"
+                    placeholder="Filtrar por estado de vacunación"
+                    #txtSearch
+                    (keyup)="onSearchVaccineStatus( txtSearch.value )"
+                    /> -->
+                    <input type="text" class="form-control" placeholder="Filtrar por tipo de vacuna" #txtSearch
+                        (keyup)="onSearchVaccineName( txtSearch.value )" />
+                </div>
+                <!-- END vaccine filter -->
+            </div>
+        </div>
+        <div class="col-md-12">
+            <br>
+        </div>
+        <div class="col-md-12">
+        </div>
+        <div class="col-md-12">
+            <table class="table table-bordered table-hover bg-white">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Last Name</th>
+                        <th>Identification Card</th>
+                        <th>Email</th>
+                        <th>Address</th>
+                        <th>Datebirth</th>
+                        <th>Cellphone</th>
+                        <th>Vaccinestatus</th>
+                        <th>Vaccinename</th>
+                        <th>Vaccinedate</th>
+                        <th>Vaccine dose</th>
+                        <th>Options</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let list of employee | filter:searchState:searchName">
+                        <td>
+                            {{list.emp_name}}
+                        </td>
+                        <td>
+                            {{list.emp_lastname}}
+                        </td>
+                        <td>
+                            {{list.emp_identification}}
+                        </td>
+                        <td>
+                            {{list.emp_mail}}
+                        </td>
+                        <td>
+                            {{list.emp_address}}
+                        </td>
+                        <td>
+                            {{list.emp_datebirth}}
+                        </td>
+                        <td>
+                            {{list.emp_cellphone}}
+                        </td>
+                        <td>
+                            {{list.emp_vaccinestatus}}
+                        </td>
+                        <td>
+                            {{list.emp_vaccinename}}
+                        </td>
+                        <td>
+                            {{list.emp_vaccinedate}}
+                        </td>
+                        <td>
+                            {{list.emp_vaccinedose}}
+                        </td>
+                        <td class="d-flex justify-content-center">
+                            <!-- Temporal information for the next form -->
+                            <a class="btn btn-success text-white ml-1" data-toggle="modal" data-target="#editEmployee"
+                                (click)="temporalInformation(list.emp_id, list.emp_name, list.emp_lastname,
+                                list.emp_address, list.emp_mail, list.emp_datebirth, list.emp_cellphone, 
+                                list.emp_vaccinestatus, list.emp_vaccinename, list.emp_vaccinedate, 
+                                list.emp_vaccinedose, list.emp_user, list.emp_password, list.emp_identification)">
+                                <i class="fas fa-edit"></i> </a>
+
+                            <!-- Modal update employee -->
+                            <div class="modal fade" id="editEmployee" tabindex="-1" role="dialog"
+                                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Edit Employee</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form [formGroup]="form">
+                                                <div class="form-group">
+                                                    <label>
+                                                        <h6>
+                                                            Id Employee: {{information.id}}
+                                                        </h6>
+                                                    </label>
+                                                </div>
+                                                <div class="form-group">
+                                                    <input type="text" name="name" formControlName="txtName"
+                                                        placeholder="Name" class="form-control">
+                                                    <div class="form-text text-danger" *ngIf=" Name.errors?.['required'] &&
+                                                        (Name.touched || Name.dirty)
+                                                        ">
+                                                        Nombre requerido
+                                                    </div>
+                                                    <div class="form-text text-danger" *ngIf=" Name.errors?.['pattern'] &&
+                                                            (Name.touched || Name.dirty)
+                                                            ">
+                                                        Ingresarar correctamente el nombre
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <input type="text" name="last name"
+                                                        formControlName="txtLastname" placeholder="last name"
+                                                        class="form-control">
+                                                    <div class="form-text text-danger" *ngIf=" LastName.errors?.['required'] &&
+                                                        (LastName.touched || LastName.dirty)
+                                                        ">
+                                                        Apellido requerido
+                                                    </div>
+                                                    <div class="form-text text-danger" *ngIf=" LastName.errors?.['pattern'] &&
+                                                            (LastName.touched || LastName.dirty)
+                                                            ">
+                                                        Ingresarar correctamente el Apellido
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <input type="text" name="identification"
+                                                        formControlName="txtIdentification"
+                                                        placeholder="identification" class="form-control">
+                                                    <div class="form-text text-danger" *ngIf=" Identification.errors?.['required'] &&
+                                                        (Identification.touched || Identification.dirty)
+                                                        ">
+                                                        Cedula requerida
+                                                    </div>
+                                                    <div class="form-text text-danger" *ngIf=" Identification.errors?.['pattern'] &&
+                                                        (Identification.touched || Identification.dirty)
+                                                        ">
+                                                        Ingresarar correctamente la cédula
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <input type="text" name="mail" formControlName="txtMail"
+                                                        placeholder="mail" class="form-control">
+                                                    <div class="form-text text-danger" *ngIf=" Email.errors?.['required'] &&
+                                                        (Email.touched || Email.dirty)
+                                                        ">
+                                                        Correo requerido
+                                                    </div>
+                                                    <div class="form-text text-danger" *ngIf=" Email.errors?.['email'] &&
+                                                            (Email.touched || Email.dirty)
+                                                            ">
+                                                        Ingresarar correctamente el Correo
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <input type="text" name="address" formControlName="txtaddress"
+                                                        placeholder="address" class="form-control">
+                                                    <div class="form-text text-danger" *ngIf=" Adress.errors?.['required'] &&
+                                                        (Adress.touched || Adress.dirty)
+                                                        ">
+                                                        Dirección requerida
+                                                    </div>
+                                                    
+                                                </div>
+                                                <div class="form-group">
+                                                    <input type="text" name="dateBirth"
+                                                        formControlName="txtdateBirth" placeholder="dateBirth"
+                                                        class="form-control">
+                                                    <div class="form-text text-danger" *ngIf=" Birth.errors?.['required'] &&
+                                                        (Birth.touched || Birth.dirty)
+                                                        ">
+                                                        Fecha de nacimiento requerida
+                                                    </div>
+                                                    <div class="form-text text-danger" *ngIf=" Birth.errors?.['pattern'] &&
+                                                            (Birth.touched || Birth.dirty)
+                                                            ">
+                                                        Ingresarar correctamente la fecha de nacimiento
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <input type="text" name="cellphone"
+                                                        formControlName="txtcellphone" placeholder="cellphone"
+                                                        class="form-control">
+                                                    <div class="form-text text-danger" *ngIf=" Cell.errors?.['required'] &&
+                                                        (Cell.touched || Cell.dirty)
+                                                        ">
+                                                        Celular requerido
+                                                    </div>
+                                                    <div class="form-text text-danger" *ngIf=" Cell.errors?.['pattern'] &&
+                                                            (Cell.touched || Cell.dirty)
+                                                            ">
+                                                        Ingresarar correctamente el Celular
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="form-group">
+                                                    <label for="state" class="control-label">Estado Vacuna</label>
+                                                    <select class="form-control" id="state"
+                                                        formControlName="txtvaccinestatus">
+                                                        <option *ngFor="let status of state" [value]="status.value">
+                                                            {{status.value}}
+                                                        </option>
+                                                    </select>
+                                                    <div class="form-text text-danger" *ngIf=" VaccineStatus.errors?.['required'] &&
+                                                        (VaccineStatus.touched || VaccineStatus.dirty)
+                                                        ">
+                                                        Estado vacunación requerida
+                                                    </div>
+
+                                                </div>
+                                                
+                                                <div class="form-group">
+                                                    <label for="vaccine" class="control-label">Vacuna</label>
+                                                    <select class="form-control" id="vaccine"
+                                                        formControlName="txtvaccinename">
+                                                        <option *ngFor="let vaccine of vaccines"
+                                                            [value]="vaccine.value">
+                                                            {{vaccine.value}}
+                                                        </option>
+                                                    </select>
+                                                    <div class="form-text text-danger" *ngIf=" VaccineName.errors?.['required'] &&
+                                                        (VaccineName.touched || VaccineName.dirty)
+                                                        ">
+                                                        Nombre de vacuna requerida
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <input type="text" name="vaccinedate"
+                                                        formControlName="txtvaccinedate" placeholder="vaccinedate"
+                                                        class="form-control">
+                                                    <div class="form-text text-danger" *ngIf=" VaccineDate.errors?.['required'] &&
+                                                        (VaccineDate.touched || VaccineDate.dirty)
+                                                        ">
+                                                        Fecha de la vacuna requerida
+                                                    </div>
+                                                    <div class="form-text text-danger" *ngIf=" VaccineDate.errors?.['pattern'] &&
+                                                            (VaccineDate.touched || VaccineDate.dirty)
+                                                            ">
+                                                        Ingresarar correctamente la fecha de vacunación
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <input type="text" name="vaccinedose"
+                                                        formControlName="txtvaccinedose" placeholder="vaccinedose"
+                                                        class="form-control">
+                                                    <div class="form-text text-danger" *ngIf=" VaccineDose.errors?.['required'] &&
+                                                        (VaccineDose.touched || VaccineDose.dirty)
+                                                        ">
+                                                        Dosis de vacuna requerida
+                                                    </div>
+                                                    <div class="form-text text-danger" *ngIf=" VaccineDose.errors?.['pattern'] &&
+                                                            (VaccineDose.touched || VaccineDose.dirty)
+                                                            ">
+                                                        Ingresarar correctamente la dosis de vacuna
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <input type="text" name="user" formControlName="txtuser"
+                                                        placeholder="user" class="form-control">
+                                                    <div class="form-text text-danger" *ngIf=" User.errors?.['required'] &&
+                                                        (User.touched || User.dirty)
+                                                        ">
+                                                        Usuario requerido
+                                                    </div>
+
+                                                </div>
+                                                <div class="form-group">
+                                                    <input type="text" name="password" formControlName="txtpassword"
+                                                        placeholder="password" class="form-control">
+                                                    <div class="form-text text-danger" *ngIf=" Password.errors?.['required'] &&
+                                                        (Password.touched || Password.dirty)
+                                                        ">
+                                                        Contraseña requerida
+                                                    </div>
+
+                                                </div>
+
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-dismiss="modal">Close</button>
+                                            <button type="button" 
+                                            class="btn btn-primary" (click)="updateEmployee()"
+                                                data-dismiss="modal">Update</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End modal update employee -->
+                            <a class="btn btn-danger text-white ml-1" (click)="deleteEmployee(list.emp_id)"> <i
+                                    class="fas fa-trash-alt"></i> </a>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+
+        </div>
+
+
+    </div>
+</div>
